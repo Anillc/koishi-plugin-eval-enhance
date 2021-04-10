@@ -1,0 +1,29 @@
+{
+  "name": "koishi-plugin-eval-enhance",
+  "version": "1.0.1",
+  "description": "enhance eval",
+  "main": "lib/index.js",
+  "repository": "https://github.com/Anillc/koishi-plugin-eval-enhance",
+  "author": "anillc",
+  "license": "MIT",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "build": "coffee -o lib/ -c src/"
+  },
+  "devDependencies": {
+    "coffeescript": "^2.5.1"
+  },
+  "dependencies": {
+    "@babel/core": "^7.13.15",
+    "@babel/plugin-transform-modules-commonjs": "^7.13.8",
+    "@babel/plugin-transform-react-jsx": "^7.13.12",
+    "ansicolor": "^1.1.93",
+    "coffeescript": "^2.5.1",
+    "koishi": "^3.2.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-jsx": "^3.4.4"
+  }
+}
