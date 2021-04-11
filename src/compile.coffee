@@ -14,7 +14,15 @@ babel = (code, options)->
   return await transformAsync code, options
 
 module.exports = (code, config) ->
-  plugins = [ ...config.babelPlugins, ...jsxPlugins ] if config.jsx
-  code = coffee code if config.coffee
+  plugins = [...config.babelPlugins]
+  switch config.lang
+    when 'coffeescript'
+      code = coffee code
+    when 'typescript'
+      plugins.push '@babel/plugin-transform-typescript'
+    when 'javascript'
+      # do noting
+    else throw 'Unsupported language'
+  plugins = [...plugins, ...jsxPlugins] if config.jsx
   res = await babel code, { plugins }
   return res.code
