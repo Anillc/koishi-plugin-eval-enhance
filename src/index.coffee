@@ -2,6 +2,7 @@
 { strip } = require 'ansicolor'
 { MainAPI } = require 'koishi-plugin-eval'
 path = require 'path'
+
 parse = require './parser'
 compile = require './compile'
 genImg = require './genHTMLImg'
@@ -22,15 +23,25 @@ jsxMiddleware = (prefix) -> (session, next) ->
 
 evalCommand = (config) -> ({session}, code) ->
   code = s.unescape code
-  res = await compile code, config
+  try
+    res = await compile code, config
+  catch
+    return strip e.toString()
   return await session.execute "evaluate #{res}", true
 
-interpolate = (command) -> (input) ->
-  source = s.unescape input
-  res = parse '{', '}', source
-  return { source, command, args: [res.code], rest: s.escape res.rest }
+interpolate = (config, command) -> (source) ->
+  unescapedSource = s.unescape source
+  try
+    parsed = parse '{', '}', unescapedSource
+    compiled = compile parsed.code, config
+  catch e
+    if e == 'Unexpected EOF'
+      return { source, rest: '{' + source, tokens: [] }
+    else
+      return { source, rest: s.escape parsed.rest, tokens: [] }
+  return { source, command, args: [compiled], rest: s.escape parsed.rest, tokens: [] }
 
-module.exports.name = 'koishi-plugin-eval-enhance'
+module.exports.name = 'eval-enhance'
 module.exports = (ctx, config) ->
   config = {
     prefix: '^'
@@ -43,7 +54,6 @@ module.exports = (ctx, config) ->
 
   deps = []
   deps.push 'koishi-plugin-eval'
-  deps.push 'koishi-plugin-puppeteer' if config.jsx
 
   ctx.with deps, -> registerAPIs ctx, config
 
@@ -51,4 +61,4 @@ module.exports = (ctx, config) ->
   cmd = ctx.command 'eeval <code:text>', 'Enhanced eval', { authority: config.authority }
     .shortcut config.prefix, { fuzzy: true, greedy: true }
     .action evalCommand config
-  Argv.interpolate '#{', '}', interpolate cmd
+  Argv.interpolate '#{', '}', interpolate config, ctx.command 'evaluate [expr:text]'

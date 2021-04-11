@@ -1,5 +1,5 @@
 coffeescript = require 'coffeescript'
-{ transformAsync } = require '@babel/core'
+{ transformSync } = require '@babel/core'
 
 jsxPlugins = [
   ['@babel/plugin-transform-react-jsx']
@@ -11,7 +11,7 @@ coffee = (code) ->
   return coffeescript.compile "do -> (#{code})", { bare: true }
 
 babel = (code, options)->
-  return await transformAsync code, options
+  return transformSync code, options
 
 module.exports = (code, config) ->
   plugins = [...config.babelPlugins]
@@ -24,5 +24,5 @@ module.exports = (code, config) ->
       # do noting
     else throw 'Unsupported language'
   plugins = [...plugins, ...jsxPlugins] if config.jsx
-  res = await babel code, { plugins }
+  res = babel code, { plugins }
   return res.code

@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-eval-enhance",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "enhance eval",
   "main": "lib/index.js",
   "repository": "https://github.com/Anillc/koishi-plugin-eval-enhance",
