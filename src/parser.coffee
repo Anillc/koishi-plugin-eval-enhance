@@ -1,13 +1,29 @@
+isDigest = (char) ->
+  code = char?.charCodeAt 0
+  return 48 <= code <= 57
+isLetter = (char) ->
+  code = char?.charCodeAt 0
+  return 65 <= code <= 90 || 97 <= code <= 122
+
 class Lexer
   pos: -1
   ch: ' '
-  peek: null
-
   constructor: (@input) ->
   read: -> @ch = if @input.length > @pos + 1 then @input[++@pos] else null
   next: ->
     loop if @ch == ' ' then @read() else break
     return null if !@ch
+    if isLetter @ch
+      id = @ch
+      while isLetter @read()
+        id += @ch
+      return { type: 'id', value: id }
+    console.log isDigest @ch
+    if isDigest @ch
+      num = @ch
+      while isDigest @read()
+        num += @ch
+      return { type: 'number', value: num }
     if @ch == '"' || @ch == '\'' || @ch == '`'
       left = @ch
       str = ''
