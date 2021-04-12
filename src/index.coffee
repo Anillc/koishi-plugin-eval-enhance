@@ -42,7 +42,7 @@ interpolate = (config, command) -> (source) ->
   return { source, command, args: [compiled], rest: s.escape parsed.rest, tokens: [] }
 
 module.exports.name = 'eval-enhance'
-module.exports = (ctx, config) ->
+module.exports.apply = (ctx, config) ->
   config = {
     prefix: '^'
     authority: 2
