@@ -15,7 +15,7 @@ registerAPIs = (ctx, config) ->
 jsxMiddleware = (prefix) -> (session, next) ->
   if !session.content.startsWith '<'
     return next()
-  res = await session.execute "render-eval render (#{session.content})"
+  res = await session.execute "eeval render (#{session.content})"
   if (s.from res)?.type == 'image'
     session.send res
     return
