@@ -1,6 +1,6 @@
 { Session, Argv, s } = require 'koishi'
 { strip } = require 'ansicolor'
-{ MainAPI } = require 'koishi-plugin-eval'
+{ MainHandle } = require 'koishi-plugin-eval'
 path = require 'path'
 
 parse = require './parser'
@@ -8,9 +8,8 @@ compile = require './compile'
 genImg = require './genHTMLImg'
 
 registerAPIs = (ctx, config) ->
-  ctx.before 'eval/start', ->
-    MainAPI::genImg = (text, time) -> (genImg ctx.app.browser) text, time
-    ctx.app.worker.config.setupFiles['eval-enhance-jsx'] = path.resolve __dirname, 'jsxInj.js' if config.jsx
+  MainHandle::genImg = (text, time) -> (genImg ctx.app.browser) text, time
+  ctx.app.worker.config.setupFiles['eval-enhance-jsx'] = path.resolve __dirname, 'jsxInj.js' if config.jsx
 
 jsxMiddleware = (prefix) -> (session, next) ->
   if !session.content.startsWith '<'
