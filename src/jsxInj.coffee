@@ -24,6 +24,7 @@ render = (dom) ->
             <style>
             #root {
               float: left;
+              transform: scale(10) translate(50%, 50%);
             }
             </style>
             #{style}
