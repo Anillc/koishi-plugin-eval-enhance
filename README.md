@@ -27,7 +27,7 @@ koishi-plugin-eval增强
   authority: 2,
   lang: 'coffeescript', //支持coffeescript、typescript、javascript, 默认为coffeescript
   jsx: true, //开启jsx支持
-  babelPlugins: [] //babel
+  babelPlugins: [] //babel插件
 }
 ```  
 
