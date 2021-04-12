@@ -7,14 +7,14 @@ ReactDOMServer = require 'react-dom/server'
 styled = require 'styled-jsx/style'
 { flushToHTML } = require 'styled-jsx/server'
 
-iRequire = (name) ->
+styledJsxRequire = (name) ->
   switch name
     when 'styled-jsx/style' then styled
     else throw 'Unexpected requiring'
 
 main = wrap parentPort
 
-render = (dom) ->
+render = (dom, scale = 8) ->
   return if !React.isValidElement dom
   body = ReactDOMServer.renderToStaticMarkup dom
   style = flushToHTML()
@@ -24,7 +24,7 @@ render = (dom) ->
             <style>
             #root {
               float: left;
-              transform: scale(10) translate(50%, 50%);
+              transform: scale(#{scale}) translate(50%, 50%);
             }
             </style>
             #{style}
@@ -34,5 +34,5 @@ render = (dom) ->
   return await main.genImg html, '//*[@id="root"]'
 
 internal.setGlobal 'React', React, false
-internal.setGlobal 'require', iRequire, false
+internal.setGlobal 'require', styledJsxRequire, false
 internal.setGlobal 'render', render, false
